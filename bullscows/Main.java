@@ -5,11 +5,34 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Random rand = new Random();
+
+        // generate the code
+        System.out.println("Please, enter the secret code's length:");
         int codeLength = scanner.nextInt();
+        scanner.nextLine();
+        String code = Main.generateCode(codeLength);
+        System.out.println("Okay, let's start a game!");
+
+        // play the game
+        int turn = 1;
+        while (true) {
+            System.out.println("Turn " + turn + ":");
+            String guess = scanner.nextLine().trim();
+            boolean gameOver = Main.evaluateGuess(code, guess);
+            if (gameOver) {
+                break;
+            }
+            turn++;
+        }
+
+        System.out.println("Congratulations! You guessed the secret code.");
+    }
+
+    private static String generateCode(int codeLength) {
+        Random rand = new Random();
         if (codeLength > 10) {
             System.out.println("Error: can't generate a secret number with a length of 11 because there aren't enough unique digits.");
-            return;
+            return "";
         }
 
         // Generate a code of the given length with no repeating digits, that doesn't start with 0
@@ -25,14 +48,12 @@ public class Main {
             digits.deleteCharAt(index);
         }
 
-        System.out.println("The random secret number is " + code);
+        return code.toString();
+    }
 
-        /* STAGE 2
-        String code = "9305";
+    private static boolean evaluateGuess(String code, String guess) {
         int bulls = 0;
         int cows = 0;
-
-        String guess = scanner.nextLine().trim();
 
         for (char digit : "0123456789".toCharArray()) {
             int occurrencesInCode = 0;
@@ -63,40 +84,6 @@ public class Main {
             String pluralCows = cows > 1 ? "s" : "";
             System.out.println(bulls + " bulls" + pluralBulls + " and " + cows + " cow" + pluralCows + ".");
         }
-        System.out.println("The secret code is " + code);
-         */
-
-        /* STAGE 1
-        System.out.println("The secret code is prepared: ****.");
-        System.out.println();
-        System.out.println("Turn 1. Answer:");
-        System.out.println("1234");
-        System.out.println("Grade: 1 cow.");
-        System.out.println();
-        System.out.println("Turn 2. Answer:");
-        System.out.println("5678");
-        System.out.println("Grade: 1 cow.");
-        System.out.println();
-        System.out.println("Turn 3. Answer:");
-        System.out.println("9012");
-        System.out.println("Grade: 1 bull and 1 cow.");
-        System.out.println();
-        System.out.println("Turn 4. Answer:");
-        System.out.println("9087");
-        System.out.println("Grade: 1 bull and 1 cow.");
-        System.out.println();
-        System.out.println("Turn 5. Answer:");
-        System.out.println("1087");
-        System.out.println("Grade: 1 cow.");
-        System.out.println();
-        System.out.println("Turn 6. Answer:");
-        System.out.println("9205");
-        System.out.println("Grade: 3 bulls.");
-        System.out.println();
-        System.out.println("Turn 7. Answer:");
-        System.out.println("9305");
-        System.out.println("Grade: 4 bulls.");
-        System.out.println("Congrats! The secret code is 9305.");
-         */
+        return bulls == code.length();
     }
 }
