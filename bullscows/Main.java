@@ -8,9 +8,35 @@ public class Main {
 
         // generate the code
         System.out.println("Input the length of the secret code:");
-        int codeLength = Integer.parseInt(scanner.nextLine());
+        String input = scanner.nextLine();
+        int codeLength;
+        try {
+            codeLength = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            System.out.println("Error: " + input + " isn't a valid number.");
+            return;
+        }
+        if (codeLength <= 0) {
+            System.out.println("Error: Invalid code length.");
+            return;
+        }
         System.out.println("Input the number of possible symbols in the code:");
-        int numberOfCharacters = Integer.parseInt(scanner.nextLine());
+        input = scanner.nextLine();
+        int numberOfCharacters;
+        try {
+            numberOfCharacters = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            System.out.println("Error: " + input + " isn't a valid number.");
+            return;
+        }
+        if (numberOfCharacters > 36) {
+            System.out.println("Error: maximum number of possible symbols in the code is 36 (0-9, a-z).");
+            return;
+        }
+        if (codeLength > numberOfCharacters) {
+            System.out.println("Error: it's not possible to generate a code with a length of " + codeLength + " with " + numberOfCharacters + " unique symbols.");
+            return;
+        }
 
         String characterRange = Main.getCharacterRange(numberOfCharacters);
         String code = Main.generateCode(codeLength, characterRange);
